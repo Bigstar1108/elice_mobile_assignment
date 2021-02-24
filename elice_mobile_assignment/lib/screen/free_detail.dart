@@ -17,7 +17,6 @@ class _FreeDetailState extends State<FreeDetail> {
   final SubjectBloc _subjectBloc = SubjectBloc();
   ScrollController _scrollController;
   int _currentOffset = 0;
-  bool _checkEndPoint = false;
 
   @override
   void initState() {
@@ -45,6 +44,15 @@ class _FreeDetailState extends State<FreeDetail> {
     }
   }
 
+  Future _refreshData() async {
+    await Future.delayed(Duration(seconds: 1));
+    _subjectBloc.clearSubjectData(true);
+    _subjectBloc.getSubjectData(true, 0, 10);
+    this.setState(() {
+      _currentOffset = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double windowWidth = MediaQuery.of(context).size.width;
@@ -66,26 +74,28 @@ class _FreeDetailState extends State<FreeDetail> {
               builder:
                   (context, AsyncSnapshot<List<SubjectCardModel>> snapshot) {
                 if (snapshot.hasData) {
-                  return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      controller: _scrollController,
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Column(
-                          children: <Widget>[
-                            Padding(padding: EdgeInsets.only(top: 5)),
-                            DetailSubjectCard(
-                              title: snapshot.data[index].title,
-                              instructors: snapshot.data[index].instructors,
-                              logoUrl: snapshot.data[index].logoUrl,
-                              onPressCard: () {
-                                print(
-                                    "${snapshot.data[index].title}을 클릭하셨습니다!");
-                              },
-                            ),
-                          ],
-                        );
-                      });
+                  return RefreshIndicator(
+                      child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          controller: _scrollController,
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Column(
+                              children: <Widget>[
+                                Padding(padding: EdgeInsets.only(top: 5)),
+                                DetailSubjectCard(
+                                  title: snapshot.data[index].title,
+                                  instructors: snapshot.data[index].instructors,
+                                  logoUrl: snapshot.data[index].logoUrl,
+                                  onPressCard: () {
+                                    print(
+                                        "${snapshot.data[index].title}을 클릭하셨습니다!");
+                                  },
+                                ),
+                              ],
+                            );
+                          }),
+                      onRefresh: _refreshData);
                 } else {
                   return Center(
                     child: CircularProgressIndicator(),

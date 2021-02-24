@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
     해당 컴포넌트는 홈 화면에 있는 과목 카드 컴포넌트 입니다.
  */
 
+const InfoContainerColor = const Color(0xFF938dd0);
+const InstructorFontColor = const Color(0xFF797a7b);
+
 class SubjectCard extends StatelessWidget {
   SubjectCard(
       {@required this.title,
@@ -41,7 +44,7 @@ class SubjectCard extends StatelessWidget {
                     right: windowWidth * 0.0328,
                     top: windowHeight * 0.0254),
                 decoration: BoxDecoration(
-                    color: Color(0xFF938dd0),
+                    color: InfoContainerColor,
                     borderRadius: BorderRadius.only(
                         topLeft: const Radius.circular(8),
                         topRight: const Radius.circular(8))),
@@ -50,7 +53,20 @@ class SubjectCard extends StatelessWidget {
                     SizedBox(
                       width: windowHeight * 0.0659,
                       height: windowHeight * 0.0659,
-                      child: Image.network('$logoUrl'),
+                      child: logoUrl == null
+                          ? Container(
+                              color: Colors.white,
+                              alignment: Alignment.center,
+                              child: Text(
+                                "No\nImage",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.black,
+                                ),
+                                textAlign: TextAlign.center,
+                              ))
+                          : Image.network('$logoUrl'),
                     ),
                     Padding(
                         padding:
@@ -61,6 +77,7 @@ class SubjectCard extends StatelessWidget {
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
+                      overflow: TextOverflow.fade,
                       textAlign: TextAlign.center,
                     )
                   ],
@@ -84,7 +101,8 @@ class SubjectCard extends StatelessWidget {
                       instructors.length == 0
                           ? "선생님 미등록"
                           : '${instructors[0]['fullname']} 선생님',
-                      style: TextStyle(fontSize: 12, color: Color(0xFF797a7b)),
+                      style:
+                          TextStyle(fontSize: 12, color: InstructorFontColor),
                     ),
                     Padding(padding: EdgeInsets.only(bottom: 7)),
                     NetworkBadge(networkType: false)

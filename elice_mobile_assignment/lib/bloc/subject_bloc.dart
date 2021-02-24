@@ -31,6 +31,14 @@ class SubjectBloc {
     }
   }
 
+  clearSubjectData(bool isFilter) async {
+    if (isFilter) {
+      _subjectFreeCardData.sink.add([]);
+    } else {
+      _subjectRecCardData.sink.add([]);
+    }
+  }
+
   dispose() {
     _subjectFreeCardData.close();
     _subjectRecCardData.close();
