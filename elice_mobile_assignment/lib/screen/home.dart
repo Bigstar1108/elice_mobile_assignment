@@ -8,6 +8,7 @@ import 'package:elice_mobile_assignment/widget/home/subject_card.dart';
 import 'package:flutter/material.dart';
 
 const HomeBgColor = const Color(0xFFf6f7f8);
+const LoadingTextColor = const Color(0xFF938dd0);
 
 class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
@@ -21,6 +22,12 @@ class _HomeState extends State<Home> {
     super.initState();
     _subjectBloc.getSubjectData(true, 0, 10);
     _subjectBloc.getSubjectData(false, 0, 10);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _subjectBloc.dispose();
   }
 
   @override
@@ -76,7 +83,7 @@ class _HomeState extends State<Home> {
                                         style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.w400,
-                                            color: Color(0xFF938dd0)),
+                                            color: LoadingTextColor),
                                       )),
                             Padding(
                               padding: EdgeInsets.only(
@@ -104,7 +111,7 @@ class _HomeState extends State<Home> {
                                         style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.w400,
-                                            color: Color(0xFF938dd0)),
+                                            color: LoadingTextColor),
                                       )),
                             Padding(
                               padding: EdgeInsets.only(
