@@ -23,7 +23,7 @@ class _HomeRouteState extends State<HomeRoute> {
       case 1:
         return QRScreen();
       default:
-        return null;
+        return Home();
     }
   }
 
