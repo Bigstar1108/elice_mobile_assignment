@@ -16,7 +16,7 @@ class SubjectApi {
 
     Map<String, dynamic> data = json.decode(response.body);
 
-    String status = data['_result']['status'];
+    String status = data['_result']['status']; // api status 값을 확인하기 위한 변수
 
     if (status == 'ok') {
       return (data['courses'] as List)
