@@ -9,6 +9,9 @@ class EliceBottomNavBar extends StatefulWidget {
   _EliceBottomNavBar createState() => _EliceBottomNavBar();
 }
 
+const SelectedItemColor = const Color(0xFF524aa1);
+const UnSelectedItemColor = const Color(0xFF8d8a8a);
+
 class _EliceBottomNavBar extends State<EliceBottomNavBar> {
   int _currentIndex = 0;
   Function onTappedItem;
@@ -24,15 +27,19 @@ class _EliceBottomNavBar extends State<EliceBottomNavBar> {
     return BottomNavigationBar(
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
+          icon: Icon(Icons.account_balance_outlined),
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.business),
+          icon: Icon(Icons.camera_alt_outlined),
           label: 'QR',
         ),
       ],
-      selectedItemColor: Colors.blue,
+      selectedItemColor: SelectedItemColor,
+      unselectedItemColor: UnSelectedItemColor,
+      selectedLabelStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+      unselectedLabelStyle:
+          TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
       currentIndex: _currentIndex,
       onTap: (index) {
         onTappedItem(index);
