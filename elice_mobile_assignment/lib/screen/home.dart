@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 const HomeBgColor = const Color(0xFFf6f7f8);
 const LoadingTextColor = const Color(0xFF938dd0);
+const AppBarHeight = 60.0;
 
 class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
@@ -38,8 +39,10 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: HomeBgColor,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60),
-        child: HomeHeader(),
+        preferredSize: const Size.fromHeight(AppBarHeight),
+        child: HomeHeader(
+          height: AppBarHeight,
+        ),
       ),
       body: SafeArea(
           bottom: false,
@@ -53,74 +56,109 @@ class _HomeState extends State<Home> {
                 streams: Tuple2(_subjectBloc.subjectFreeCardData,
                     _subjectBloc.subjectRecCardData),
                 builder: (context, snapshots) {
-                  return DraggableScrollableSheet(
-                    maxChildSize: 1,
-                    initialChildSize: 1,
-                    minChildSize: 1,
-                    builder: (context, scrollController) {
-                      return SingleChildScrollView(
-                        child: Column(
-                          children: <Widget>[
-                            HomeCategory(
-                                title: '추천 과목',
-                                onPressCategory: () {
-                                  Navigator.pushNamed(context, '/recommend');
-                                }),
-                            Padding(
-                                padding: EdgeInsets.only(
-                                    bottom: windowHeight * 0.016)),
-                            Container(
-                                width: windowWidth,
-                                height: windowHeight * 0.29975,
-                                alignment: Alignment.center,
-                                child: snapshots.item1.hasData
-                                    ? ListView(
-                                        scrollDirection: Axis.horizontal,
-                                        children: makeSubjectItems(
-                                            snapshots.item1.data))
-                                    : Text(
-                                        "Loading...",
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w400,
-                                            color: LoadingTextColor),
-                                      )),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  bottom: windowHeight * 0.0359),
-                            ),
-                            HomeCategory(
-                                title: '무료 과목',
-                                onPressCategory: () {
-                                  Navigator.pushNamed(context, '/free');
-                                }),
-                            Padding(
-                                padding: EdgeInsets.only(
-                                    bottom: windowHeight * 0.016)),
-                            Container(
-                                width: windowWidth,
-                                height: windowHeight * 0.29975,
-                                alignment: Alignment.center,
-                                child: snapshots.item1.hasData
-                                    ? ListView(
-                                        scrollDirection: Axis.horizontal,
-                                        children: makeSubjectItems(
-                                            snapshots.item1.data))
-                                    : Text(
-                                        "Loading...",
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w400,
-                                            color: LoadingTextColor),
-                                      )),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  bottom: windowHeight * 0.0359),
-                            ),
-                          ],
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        HomeCategory(
+                            title: '추천 과목',
+                            onPressCategory: () {
+                              Navigator.pushNamed(context, '/recommend');
+                            }),
+                        Padding(
+                            padding:
+                                EdgeInsets.only(bottom: windowHeight * 0.016)),
+                        Container(
+                            width: windowWidth,
+                            height: windowHeight * 0.29975,
+                            alignment: Alignment.center,
+                            child: snapshots.item1.hasData
+                                ? ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: snapshots.item1.data.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Row(
+                                        children: <Widget>[
+                                          SubjectCard(
+                                            title: snapshots
+                                                .item1.data[index].title,
+                                            instructors: snapshots
+                                                .item1.data[index].instructors,
+                                            logoUrl: snapshots
+                                                .item1.data[index].logoUrl,
+                                            onPressCard: () {
+                                              print(
+                                                  "${snapshots.item1.data[index].title}을 클릭하셨습니다!");
+                                            },
+                                          ),
+                                          Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 13))
+                                        ],
+                                      );
+                                    })
+                                : Text(
+                                    "Recommend Subject Loading...",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w400,
+                                        color: LoadingTextColor),
+                                  )),
+                        Padding(
+                          padding:
+                              EdgeInsets.only(bottom: windowHeight * 0.0359),
                         ),
-                      );
-                    },
+                        HomeCategory(
+                            title: '무료 과목',
+                            onPressCategory: () {
+                              Navigator.pushNamed(context, '/free');
+                            }),
+                        Padding(
+                            padding:
+                                EdgeInsets.only(bottom: windowHeight * 0.016)),
+                        Container(
+                            width: windowWidth,
+                            height: windowHeight * 0.29975,
+                            alignment: Alignment.center,
+                            child: snapshots.item2.hasData
+                                ? ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: snapshots.item2.data.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Row(
+                                        children: <Widget>[
+                                          SubjectCard(
+                                            title: snapshots
+                                                .item2.data[index].title,
+                                            instructors: snapshots
+                                                .item2.data[index].instructors,
+                                            logoUrl: snapshots
+                                                .item2.data[index].logoUrl,
+                                            onPressCard: () {
+                                              print(
+                                                  "${snapshots.item2.data[index].title}을 클릭하셨습니다!");
+                                            },
+                                          ),
+                                          Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 13))
+                                        ],
+                                      );
+                                    })
+                                : Text(
+                                    "Free Subject Loading...",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w400,
+                                        color: LoadingTextColor),
+                                  )),
+                        Padding(
+                          padding:
+                              EdgeInsets.only(bottom: windowHeight * 0.0359),
+                        ),
+                      ],
+                    ),
                   );
                 },
               ))),
