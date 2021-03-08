@@ -2,6 +2,10 @@ import 'package:elice_mobile_assignment/widget/logo/elice_logo.dart';
 import 'package:flutter/material.dart';
 
 class HomeHeader extends StatelessWidget {
+  HomeHeader({@required this.height});
+
+  final double height;
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -9,7 +13,7 @@ class HomeHeader extends StatelessWidget {
       brightness: Brightness.light,
       centerTitle: true,
       elevation: 0,
-      toolbarHeight: 60,
+      toolbarHeight: height,
       title: EliceLogo(),
       actions: [
         IconButton(

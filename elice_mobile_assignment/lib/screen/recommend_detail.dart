@@ -7,6 +7,7 @@ import 'package:elice_mobile_assignment/widget/headers/detail_header.dart';
 import 'package:flutter/material.dart';
 
 const DetailBgColor = const Color(0xFFf6f7f8);
+const AppBarHeight = 60.0;
 
 class RecommendDetail extends StatefulWidget {
   @override
@@ -61,9 +62,10 @@ class _RecommendDetailState extends State<RecommendDetail> {
     return Scaffold(
         backgroundColor: DetailBgColor,
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
+          preferredSize: const Size.fromHeight(AppBarHeight),
           child: DetailHeader(
             title: '추천 과목',
+            height: AppBarHeight,
           ),
         ),
         body: Container(

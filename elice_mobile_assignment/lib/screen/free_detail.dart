@@ -7,6 +7,7 @@ import 'package:elice_mobile_assignment/widget/headers/detail_header.dart';
 import 'package:flutter/material.dart';
 
 const DetailBgColor = const Color(0xFFf6f7f8);
+const AppBarHeight = 60.0;
 
 class FreeDetail extends StatefulWidget {
   @override
@@ -21,7 +22,7 @@ class _FreeDetailState extends State<FreeDetail> {
   @override
   void initState() {
     super.initState();
-    _subjectBloc.getFreeSubjectData(_currentOffset, 10);
+    _subjectBloc.getFreeSubjectData(_currentOffset, null);
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
   }
@@ -61,9 +62,10 @@ class _FreeDetailState extends State<FreeDetail> {
     return Scaffold(
         backgroundColor: DetailBgColor,
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
+          preferredSize: const Size.fromHeight(AppBarHeight),
           child: DetailHeader(
             title: '무료 과목',
+            height: AppBarHeight,
           ),
         ),
         body: Container(

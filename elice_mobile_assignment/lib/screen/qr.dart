@@ -12,6 +12,7 @@ class QRScreen extends StatefulWidget {
 }
 
 const YellowHighlightColor = const Color(0xFFffff00);
+const AppBarHeight = 60.0;
 
 class _QRScreenState extends State<QRScreen> {
   final GlobalKey qrkey = GlobalKey(debugLabel: 'QR');
@@ -36,7 +37,9 @@ class _QRScreenState extends State<QRScreen> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
-        child: QRHeader(),
+        child: QRHeader(
+          height: AppBarHeight,
+        ),
       ),
       body: SafeArea(
           bottom: false,

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class QRHeader extends StatelessWidget {
+  QRHeader({@required this.height});
+
+  final double height;
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -8,7 +12,7 @@ class QRHeader extends StatelessWidget {
       brightness: Brightness.light,
       centerTitle: true,
       elevation: 0,
-      toolbarHeight: 60,
+      toolbarHeight: height,
       title: Text(
         'QR',
         style: TextStyle(
