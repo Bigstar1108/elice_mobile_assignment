@@ -43,7 +43,7 @@ class _EliceBottomNavBar extends State<EliceBottomNavBar> {
       currentIndex: _currentIndex,
       onTap: (index) {
         onTappedItem(index);
-        this.setState(() {
+        setState(() {
           _currentIndex = index;
         });
       },
