@@ -21,7 +21,7 @@ class _FreeDetailState extends State<FreeDetail> {
   @override
   void initState() {
     super.initState();
-    _subjectBloc.getSubjectData(true, _currentOffset, 10);
+    _subjectBloc.getFreeSubjectData(_currentOffset, 10);
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
   }
@@ -37,7 +37,7 @@ class _FreeDetailState extends State<FreeDetail> {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      _subjectBloc.getSubjectData(true, _currentOffset + 1, 10);
+      _subjectBloc.getFreeSubjectData(_currentOffset + 1, 10);
       this.setState(() {
         _currentOffset = _currentOffset + 1;
       });
@@ -47,7 +47,7 @@ class _FreeDetailState extends State<FreeDetail> {
   Future _refreshData() async {
     await Future.delayed(Duration(seconds: 1));
     _subjectBloc.clearSubjectData(true);
-    _subjectBloc.getSubjectData(true, 0, 10);
+    _subjectBloc.getFreeSubjectData(0, 10);
     this.setState(() {
       _currentOffset = 0;
     });

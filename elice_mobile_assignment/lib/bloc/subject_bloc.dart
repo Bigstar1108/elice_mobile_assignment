@@ -16,19 +16,22 @@ class SubjectBloc {
   List<SubjectCardModel> allFreeSubjectData = [];
   List<SubjectCardModel> allRecSubjectData = [];
 
-  getSubjectData(bool isFilter, int offset, int count) async {
+  getFreeSubjectData(int offset, int count) async {
     List<SubjectCardModel> subjectDataList =
-        await _subjectRepository.getSubjectData(isFilter, offset, count);
+        await _subjectRepository.getFreeSubjectData(offset, count);
 
-    if (isFilter) {
-      allFreeSubjectData.addAll(subjectDataList);
+    allFreeSubjectData.addAll(subjectDataList);
 
-      _subjectFreeCardData.sink.add(allFreeSubjectData);
-    } else {
-      allRecSubjectData.addAll(subjectDataList);
+    _subjectFreeCardData.sink.add(allFreeSubjectData);
+  }
 
-      _subjectRecCardData.sink.add(allRecSubjectData);
-    }
+  getRecSubjectData(int offset, int count) async {
+    List<SubjectCardModel> subjectDataList =
+        await _subjectRepository.getRecSubjectData(offset, count);
+
+    allRecSubjectData.addAll(subjectDataList);
+
+    _subjectRecCardData.sink.add(allRecSubjectData);
   }
 
   clearSubjectData(bool isFilter) async {

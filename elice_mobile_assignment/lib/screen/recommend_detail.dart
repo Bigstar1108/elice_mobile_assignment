@@ -21,7 +21,7 @@ class _RecommendDetailState extends State<RecommendDetail> {
   @override
   void initState() {
     super.initState();
-    _subjectBloc.getSubjectData(false, _currentOffset, 10);
+    _subjectBloc.getRecSubjectData(_currentOffset, 10);
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
   }
@@ -30,7 +30,7 @@ class _RecommendDetailState extends State<RecommendDetail> {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      _subjectBloc.getSubjectData(false, _currentOffset + 1, 10);
+      _subjectBloc.getRecSubjectData(_currentOffset + 1, 10);
       this.setState(() {
         _currentOffset = _currentOffset + 1;
       });
@@ -47,7 +47,7 @@ class _RecommendDetailState extends State<RecommendDetail> {
   Future _refreshData() async {
     await Future.delayed(Duration(seconds: 1));
     _subjectBloc.clearSubjectData(false);
-    _subjectBloc.getSubjectData(false, 0, 10);
+    _subjectBloc.getRecSubjectData(0, 10);
     this.setState(() {
       _currentOffset = 0;
     });

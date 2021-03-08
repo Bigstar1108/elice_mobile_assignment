@@ -20,8 +20,8 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _subjectBloc.getSubjectData(true, 0, 10);
-    _subjectBloc.getSubjectData(false, 0, 10);
+    _subjectBloc.getFreeSubjectData(0, 10);
+    _subjectBloc.getRecSubjectData(0, 10);
   }
 
   @override
