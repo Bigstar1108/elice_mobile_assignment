@@ -1,5 +1,6 @@
 import 'package:elice_mobile_assignment/bloc/subject_bloc.dart';
 import 'package:elice_mobile_assignment/model/subject_card_model.dart';
+import 'package:elice_mobile_assignment/screen/subject_detail.dart';
 import 'package:multiple_stream_builder/multiple_stream_builder.dart';
 import 'package:tuple/tuple.dart';
 import 'package:elice_mobile_assignment/widget/headers/home_header.dart';
@@ -62,7 +63,11 @@ class _HomeState extends State<Home> {
                         HomeCategory(
                             title: '추천 과목',
                             onPressCategory: () {
-                              Navigator.pushNamed(context, '/recommend');
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          SubjectDetail(isFilter: false)));
                             }),
                         Padding(
                             padding:
@@ -111,7 +116,11 @@ class _HomeState extends State<Home> {
                         HomeCategory(
                             title: '무료 과목',
                             onPressCategory: () {
-                              Navigator.pushNamed(context, '/free');
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          SubjectDetail(isFilter: true)));
                             }),
                         Padding(
                             padding:
@@ -164,26 +173,4 @@ class _HomeState extends State<Home> {
               ))),
     );
   }
-}
-
-List<Widget> makeSubjectItems(List<SubjectCardModel> data) {
-  List<Widget> results = [];
-
-  for (var i = 0; i < data.length; i++) {
-    results.add(Row(
-      children: <Widget>[
-        SubjectCard(
-          title: data[i].title,
-          instructors: data[i].instructors,
-          logoUrl: data[i].logoUrl,
-          onPressCard: () {
-            print("${data[i].title}을 클릭하셨습니다!");
-          },
-        ),
-        Padding(padding: EdgeInsets.only(left: 13))
-      ],
-    ));
-  }
-
-  return results;
 }
