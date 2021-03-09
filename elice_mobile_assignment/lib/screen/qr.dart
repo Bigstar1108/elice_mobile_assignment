@@ -97,6 +97,8 @@ class _QRScreenState extends State<QRScreen> {
     } else {
       var transformUrl = utf8.decode(base64.decode(url));
 
+      // var transformUrlByUri = Uri.encodeFull(url);
+
       return transformUrl;
     }
   }
