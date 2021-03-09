@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:elice_mobile_assignment/model/subject_card_model.dart';
 import 'package:http/http.dart' show Client;
-import 'package:http/http.dart';
 
 class SubjectApi {
   Client client = Client();
