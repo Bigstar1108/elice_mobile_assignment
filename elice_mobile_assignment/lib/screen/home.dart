@@ -1,8 +1,8 @@
 import 'package:elice_mobile_assignment/bloc/subject_bloc.dart';
-import 'package:elice_mobile_assignment/model/subject_card_model.dart';
+import 'package:elice_mobile_assignment/bloc/subject_event.dart';
+import 'package:elice_mobile_assignment/bloc/subject_state.dart';
 import 'package:elice_mobile_assignment/screen/subject_detail.dart';
-import 'package:multiple_stream_builder/multiple_stream_builder.dart';
-import 'package:tuple/tuple.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:elice_mobile_assignment/widget/headers/home_header.dart';
 import 'package:elice_mobile_assignment/widget/home/category.dart';
 import 'package:elice_mobile_assignment/widget/home/subject_card.dart';
@@ -22,14 +22,17 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _subjectBloc.getFreeSubjectData(0, 10);
-    _subjectBloc.getRecSubjectData(0, 10);
+    _loadSubject();
+  }
+
+  _loadSubject() {
+    _subjectBloc.add(SubjectGetFreeSubjectEvent(count: 10, offset: 0));
+    _subjectBloc.add(SubjectGetRecommendedSubjectEvent(count: 10, offset: 0));
   }
 
   @override
   void dispose() {
     super.dispose();
-    _subjectBloc.dispose();
   }
 
   @override
@@ -46,131 +49,125 @@ class _HomeState extends State<Home> {
         ),
       ),
       body: SafeArea(
-          bottom: false,
-          child: Container(
-              width: windowWidth,
-              height: windowHeight,
-              padding: EdgeInsets.only(
-                  top: windowHeight * 0.03298, left: windowWidth * 0.0426),
-              child: StreamBuilder2<List<SubjectCardModel>,
-                  List<SubjectCardModel>>(
-                streams: Tuple2(_subjectBloc.subjectFreeCardData,
-                    _subjectBloc.subjectRecCardData),
-                builder: (context, snapshots) {
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: <Widget>[
-                        HomeCategory(
-                            title: '추천 과목',
-                            onPressCategory: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          SubjectDetail(isFilter: false)));
-                            }),
-                        Padding(
-                            padding:
-                                EdgeInsets.only(bottom: windowHeight * 0.016)),
-                        Container(
-                            width: windowWidth,
-                            height: windowHeight * 0.29975,
-                            alignment: Alignment.center,
-                            child: snapshots.item1.hasData
-                                ? ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: snapshots.item1.data.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Row(
-                                        children: <Widget>[
-                                          SubjectCard(
-                                            title: snapshots
-                                                .item1.data[index].title,
-                                            instructors: snapshots
-                                                .item1.data[index].instructors,
-                                            logoUrl: snapshots
-                                                .item1.data[index].logoUrl,
-                                            onPressCard: () {
-                                              print(
-                                                  "${snapshots.item1.data[index].title}을 클릭하셨습니다!");
-                                            },
-                                          ),
-                                          Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 13))
-                                        ],
-                                      );
-                                    })
-                                : Text(
-                                    "Recommend Subject Loading...",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w400,
-                                        color: LoadingTextColor),
-                                  )),
-                        Padding(
-                          padding:
-                              EdgeInsets.only(bottom: windowHeight * 0.0359),
-                        ),
-                        HomeCategory(
-                            title: '무료 과목',
-                            onPressCategory: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          SubjectDetail(isFilter: true)));
-                            }),
-                        Padding(
-                            padding:
-                                EdgeInsets.only(bottom: windowHeight * 0.016)),
-                        Container(
-                            width: windowWidth,
-                            height: windowHeight * 0.29975,
-                            alignment: Alignment.center,
-                            child: snapshots.item2.hasData
-                                ? ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: snapshots.item2.data.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Row(
-                                        children: <Widget>[
-                                          SubjectCard(
-                                            title: snapshots
-                                                .item2.data[index].title,
-                                            instructors: snapshots
-                                                .item2.data[index].instructors,
-                                            logoUrl: snapshots
-                                                .item2.data[index].logoUrl,
-                                            onPressCard: () {
-                                              print(
-                                                  "${snapshots.item2.data[index].title}을 클릭하셨습니다!");
-                                            },
-                                          ),
-                                          Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 13))
-                                        ],
-                                      );
-                                    })
-                                : Text(
-                                    "Free Subject Loading...",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w400,
-                                        color: LoadingTextColor),
-                                  )),
-                        Padding(
-                          padding:
-                              EdgeInsets.only(bottom: windowHeight * 0.0359),
-                        ),
-                      ],
+        bottom: false,
+        child: Container(
+          width: windowWidth,
+          height: windowHeight,
+          padding: EdgeInsets.only(
+              top: windowHeight * 0.03298, left: windowWidth * 0.0426),
+          child: BlocBuilder(
+            builder: (BuildContext context, SubjectState state) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    HomeCategory(
+                        title: '추천 과목',
+                        onPressCategory: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      SubjectDetail(isFilter: false)));
+                        }),
+                    Padding(
+                        padding: EdgeInsets.only(bottom: windowHeight * 0.016)),
+                    Container(
+                        width: windowWidth,
+                        height: windowHeight * 0.29975,
+                        alignment: Alignment.center,
+                        child: state is SubjectSuccessState
+                            ? ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: state.freeSubjectData.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Row(
+                                    children: <Widget>[
+                                      SubjectCard(
+                                        title:
+                                            state.freeSubjectData[index].title,
+                                        instructors: state
+                                            .freeSubjectData[index].instructors,
+                                        logoUrl: state
+                                            .freeSubjectData[index].logoUrl,
+                                        onPressCard: () {
+                                          print(
+                                              "${state.freeSubjectData[index].title}을 클릭하셨습니다!");
+                                        },
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(left: 13))
+                                    ],
+                                  );
+                                })
+                            : Text(
+                                "Recommend Subject Loading...",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                    color: LoadingTextColor),
+                              )),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: windowHeight * 0.0359),
                     ),
-                  );
-                },
-              ))),
+                    HomeCategory(
+                        title: '무료 과목',
+                        onPressCategory: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      SubjectDetail(isFilter: true)));
+                        }),
+                    Padding(
+                        padding: EdgeInsets.only(bottom: windowHeight * 0.016)),
+                    Container(
+                        width: windowWidth,
+                        height: windowHeight * 0.29975,
+                        alignment: Alignment.center,
+                        child: state is SubjectSuccessState
+                            ? ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: state.recommendSubjectData.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Row(
+                                    children: <Widget>[
+                                      SubjectCard(
+                                        title: state
+                                            .recommendSubjectData[index].title,
+                                        instructors: state
+                                            .recommendSubjectData[index]
+                                            .instructors,
+                                        logoUrl: state
+                                            .recommendSubjectData[index]
+                                            .logoUrl,
+                                        onPressCard: () {
+                                          print(
+                                              "${state.recommendSubjectData[index].title}을 클릭하셨습니다!");
+                                        },
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(left: 13))
+                                    ],
+                                  );
+                                })
+                            : Text(
+                                "Free Subject Loading...",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                    color: LoadingTextColor),
+                              )),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: windowHeight * 0.0359),
+                    ),
+                  ],
+                ),
+              );
+            },
+            bloc: _subjectBloc,
+          ),
+        ),
+      ),
     );
   }
 }
